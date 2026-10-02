@@ -81,11 +81,11 @@ class CatalogBuilderTest {
         assertNotNull(catalog.countries.firstOrNull { it.code == "CO" })
 
         val byId = catalog.channels.associateBy { it.id }
-        val missing = FeaturedChannels.ids.filter { entry ->
+        val missing = (FeaturedChannels.ids + WorldChannels.ids).filter { entry ->
             val channel = byId[entry.substringBefore('@')]
             val feed = entry.substringAfter('@', "")
             channel == null || (feed.isNotEmpty() && channel.streams.none { it.feed == feed })
         }
-        assertTrue("Destacados que no existen en la API: $missing", missing.isEmpty())
+        assertTrue("Destacados/reconocidos que no existen en la API: $missing", missing.isEmpty())
     }
 }

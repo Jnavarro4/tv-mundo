@@ -61,9 +61,11 @@ object Translations {
         return if (localized.isBlank() || localized.equals(iso, ignoreCase = true)) fallback else localized
     }
 
-    /** Minúsculas y sin tildes, para búsquedas. */
-    fun normalize(text: String): String =
-        Normalizer.normalize(text, Normalizer.Form.NFD)
-            .replace(Regex("\\p{Mn}+"), "")
-            .lowercase(Locale.ROOT)
+    private val combiningMarks = Regex("\\p{Mn}+")
+
+    /** Minúsculas y sin tildes, para búsquedas. Rápido para texto ASCII (la mayoría de nombres). */
+    fun normalize(text: String): String {
+        if (text.all { it.code < 128 }) return text.lowercase(Locale.ROOT)
+        return combiningMarks.replace(Normalizer.normalize(text, Normalizer.Form.NFD), "").lowercase(Locale.ROOT)
+    }
 }

@@ -16,6 +16,8 @@ object TvColors {
     val OnSurfaceDim = Color(0xFF9AA4B2)
     val FocusBorder = Color(0xFFFFFFFF)
     val Error = Color(0xFFFF6B6B)
+    val Live = Color(0xFFE53935)
+    val Rail = Color(0xFF080A0E)
 
     /** Fondo detrás de los logos: tono medio para que se vean tanto logos oscuros como claros. */
     val LogoBackground = Color(0xFF9AA5B4)

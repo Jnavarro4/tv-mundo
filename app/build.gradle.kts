@@ -19,6 +19,7 @@ android {
         versionCode = ciBuildNumber
         versionName = "1.0.$ciBuildNumber"
         vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -38,7 +39,9 @@ android {
             signingConfig = signingConfigs.getByName("tvmundo")
         }
         release {
-            isMinifyEnabled = false
+            // R8 reduce el APK y acelera el arranque en TVs modestas.
+            isMinifyEnabled = true
+            isShrinkResources = true
             signingConfig = signingConfigs.getByName("tvmundo")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -90,6 +93,15 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.datastore.preferences)
+    implementation(libs.compose.material.icons.core)
+    // Instala los perfiles de compilación de Compose/Media3 aunque la app no venga de Play Store.
+    implementation(libs.profileinstaller)
 
     testImplementation(libs.junit)
+
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.runner)
+    debugImplementation(libs.compose.ui.test.manifest)
 }

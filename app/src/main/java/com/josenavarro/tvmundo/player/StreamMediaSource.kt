@@ -19,7 +19,11 @@ object StreamMediaSource {
     /** Agente por defecto cuando el stream no exige uno: muchos servidores rechazan agentes desconocidos. */
     private const val DEFAULT_USER_AGENT = "VLC/3.0.20 LibVLC/3.0.20"
 
-    fun create(source: StreamSource): MediaSource {
+    /**
+     * @param fastFail tiempos de espera cortos: si un stream no responde se pasa
+     *   rápido al siguiente (o se abandona la vista previa) en vez de esperar.
+     */
+    fun create(source: StreamSource, fastFail: Boolean = false): MediaSource {
         val headers = buildMap {
             source.referrer?.let {
                 put("Referer", it)
@@ -30,8 +34,8 @@ object StreamMediaSource {
             .setUserAgent(source.userAgent ?: DEFAULT_USER_AGENT)
             .setDefaultRequestProperties(headers)
             .setAllowCrossProtocolRedirects(true)
-            .setConnectTimeoutMs(15_000)
-            .setReadTimeoutMs(20_000)
+            .setConnectTimeoutMs(if (fastFail) 6_000 else 10_000)
+            .setReadTimeoutMs(if (fastFail) 8_000 else 15_000)
 
         val uri = Uri.parse(source.url)
         val item = MediaItem.Builder().setUri(uri).apply {

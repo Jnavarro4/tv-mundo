@@ -1,0 +1,67 @@
+name: Sugeridos con IA
+
+# Una vez al día Claude (con búsqueda web) arma la lista de eventos y canales
+# recomendados y la publica en la rama `datos`, de donde la lee la app.
+# Requiere el secret ANTHROPIC_API_KEY (ver README). Sin él, el job termina sin hacer nada.
+
+on:
+  schedule:
+    - cron: "0 10 * * *" # 05:00 en Colombia
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sugeridos
+  cancel-in-progress: true
+
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      # Opcional: variable del repo para cambiar de modelo (por defecto claude-opus-5-5).
+      MODELO_CLAUDE: ${{ vars.MODELO_CLAUDE }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: ¿Hay clave de API?
+        id: clave
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::warning::Falta el secret ANTHROPIC_API_KEY: no se generan sugeridos. Ver README."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-python@v7
+        if: steps.clave.outputs.ok == 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Generar sugeridos.json
+        if: steps.clave.outputs.ok == 'true'
+        run: |
+          pip install -q -r ia/requirements.txt
+          python ia/generar_sugeridos.py --salida "$RUNNER_TEMP/sugeridos.json"
+
+      - name: Publicar en la rama datos
+        if: steps.clave.outputs.ok == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin datos > /dev/null; then
+            git fetch -q origin datos
+            git checkout -q -B datos origin/datos
+          else
+            git checkout -q --orphan datos
+            git rm -rq --cached .
+            git clean -fdq
+          fi
+          cp "$RUNNER_TEMP/sugeridos.json" sugeridos.json
+          git add sugeridos.json
+          git commit -q -m "Sugeridos $(date -u +%Y-%m-%dT%H:%MZ)" || { echo "Sin cambios"; exit 0; }
+          git push -q origin datos
