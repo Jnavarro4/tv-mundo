@@ -1,0 +1,10 @@
+[
+{"channel":"CaracolTV.co","feed":"SD","title":"Caracol TV","url":"https://a.example/low.m3u8","quality":"480p","labels":[],"user_agent":null,"referrer":null},
+{"channel":"CaracolTV.co","feed":"SD","title":"Caracol TV","url":"https://a.example/geo.m3u8","quality":"1080p","labels":["Geo-blocked"],"user_agent":null,"referrer":null},
+{"channel":"CaracolTV.co","feed":"SD","title":"Caracol TV","url":"https://a.example/hd.m3u8","quality":"720p","labels":[],"user_agent":"Mozilla/5.0","referrer":"https://caracol.example/"},
+{"channel":"France24.fr","feed":"English","title":"France 24 English","url":"https://f.example/en.m3u8","quality":"1080p","labels":[],"user_agent":null,"referrer":null},
+{"channel":"France24.fr","feed":"Spanish","title":"France 24 Español","url":"https://f.example/es.m3u8","quality":"720p","labels":[],"user_agent":null,"referrer":null},
+{"channel":"Adult.us","feed":null,"title":"Adult","url":"https://x.example/x.m3u8","quality":null,"labels":[],"user_agent":null,"referrer":null},
+{"channel":"Old.co","feed":null,"title":"Old","url":"https://o.example/o.m3u8","quality":null,"labels":[],"user_agent":null,"referrer":null},
+{"channel":null,"feed":null,"title":"Unknown","url":"https://u.example/u.m3u8","quality":null,"labels":[],"user_agent":null,"referrer":null}
+]

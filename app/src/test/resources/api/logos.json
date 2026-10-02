@@ -1,0 +1,6 @@
+[
+{"channel":"CaracolTV.co","feed":null,"in_use":true,"tags":[],"width":512,"height":512,"format":"SVG","url":"https://l.example/caracol.svg"},
+{"channel":"CaracolTV.co","feed":"SD","in_use":true,"tags":[],"width":1000,"height":500,"format":"PNG","url":"https://l.example/caracol-feed.png"},
+{"channel":"CaracolTV.co","feed":null,"in_use":true,"tags":[],"width":300,"height":150,"format":"PNG","url":"https://l.example/caracol.png"},
+{"channel":"Adult.us","feed":null,"in_use":true,"tags":[],"width":300,"height":150,"format":"PNG","url":"https://l.example/x.png"}
+]
