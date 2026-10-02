@@ -61,6 +61,7 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
@@ -124,7 +125,10 @@ fun PlayerScreen(
     }
 
     val player = remember {
-        ExoPlayer.Builder(context)
+        // Si la TV no trae decodificador para el audio (MP2, AC-3…), se usa FFmpeg por software.
+        val renderers = DefaultRenderersFactory(context)
+            .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
+        ExoPlayer.Builder(context, renderers)
             // Arranque y zapping más rápidos que los valores por defecto (2,5 s de búfer inicial).
             .setLoadControl(
                 DefaultLoadControl.Builder()

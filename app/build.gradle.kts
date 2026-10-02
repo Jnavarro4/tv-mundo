@@ -86,6 +86,8 @@ dependencies {
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.exoplayer.hls)
     implementation(libs.media3.ui)
+    // Audio MP2/AC-3/E-AC-3 por software: muchos canales de cable lo usan y varias TVs no lo decodifican.
+    implementation(libs.media3.ffmpeg.decoder)
 
     implementation(libs.okhttp)
     implementation(libs.kotlinx.serialization.json)

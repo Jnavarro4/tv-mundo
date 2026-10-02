@@ -6,3 +6,6 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 -keep,includedescriptorclasses class com.josenavarro.tvmundo.**$$serializer { *; }
+
+# Decodificador FFmpeg: DefaultRenderersFactory lo carga por reflexión y usa JNI.
+-keep class androidx.media3.decoder.ffmpeg.** { *; }
